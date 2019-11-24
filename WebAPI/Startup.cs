@@ -14,8 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.models.plant;
 using WebAPI.Models;
 using WebAPI.Models.Cri;
+using WebAPI.Services.Mongo;
 
 namespace WebAPI
 {
@@ -34,11 +36,15 @@ namespace WebAPI
             //Inject AppSettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
 
+            services.Configure<MongoDatabaseSettings>(Configuration.GetSection(nameof(MongoDatabaseSettings)));
+            services.AddSingleton<QuizService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<criTestQnsContext>();
+            services.AddDbContext<plantdbContext>();
+            
             services.AddDbContext<AuthenticationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnectionAzure")));
             
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<AuthenticationContext>();
