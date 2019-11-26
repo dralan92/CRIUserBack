@@ -67,6 +67,7 @@ namespace WebAPI.Controllers
 
             try
             {
+                plants.LastWateredOn = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
